@@ -24,17 +24,17 @@ var ExtendableProxy = (function (_super) {
     }
     return ExtendableProxy;
 }(Object));
-var Data = (function (_super) {
-    __extends(Data, _super);
-    function Data(handler, req) {
+function commonConstructor(req, obj) { req.forEach(function (prop) { return obj.data[prop] = req[prop]; }); }
+var Base = (function (_super) {
+    __extends(Base, _super);
+    function Base(handler, req) {
         var _this = _super.call(this, handler !== null && handler !== void 0 ? handler : {}) || this;
         if (req)
             commonConstructor(req, _this);
         return _this;
     }
-    return Data;
+    return Base;
 }(ExtendableProxy));
-function commonConstructor(req, obj) { req.forEach(function (prop) { return obj.data[prop] = req[prop]; }); }
 var Volumen = (function (_super) {
     __extends(Volumen, _super);
     function Volumen(h, r) {
@@ -42,7 +42,7 @@ var Volumen = (function (_super) {
     }
     ;
     return Volumen;
-}(Data));
+}(Base));
 exports.Volumen = Volumen;
 var Coleccion = (function (_super) {
     __extends(Coleccion, _super);
@@ -51,5 +51,5 @@ var Coleccion = (function (_super) {
     }
     ;
     return Coleccion;
-}(Data));
+}(Base));
 exports.Coleccion = Coleccion;

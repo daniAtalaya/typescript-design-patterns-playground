@@ -4,8 +4,8 @@ class ExtendableProxy extends Object {
         return new Proxy(this, handler);
     }
 }
-function commonConstructor(req: any, obj: Data<any, any>){ req.forEach((prop: string | number) => obj.data[prop] = req[prop]); }
-class Data<T extends Object, TI> extends ExtendableProxy {
+function commonConstructor(req: any, obj: Base<any, any>){ req.forEach((prop: string | number) => obj.data[prop] = req[prop]); }
+class Base<T extends Object, TI> extends ExtendableProxy {
 	data: TI;
 	constructor(handler?: ProxyHandler<T>, req?: TI){
 		super(handler ?? {});
@@ -35,5 +35,5 @@ type TColeccion = {
 	volumes: Volumen[];
 	info: String[];
 }
-export class Volumen extends Data<Volumen, TVolumen> { constructor(h?: any, r?: any){super(h, r)}; }
-export class Coleccion extends Data<Coleccion, TColeccion> { constructor(h?: any, r?: any){super(h, r)}; }
+export class Volumen extends Base<Volumen, TVolumen> { constructor(h?: any, r?: any){super(h, r)}; }
+export class Coleccion extends Base<Coleccion, TColeccion> { constructor(h?: any, r?: any){super(h, r)}; }
