@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 exports.__esModule = true;
-exports.Coleccion = exports.Volumen = void 0;
+exports.Data = void 0;
 var ExtendableProxy = (function (_super) {
     __extends(ExtendableProxy, _super);
     function ExtendableProxy(handler) {
@@ -24,32 +24,24 @@ var ExtendableProxy = (function (_super) {
     }
     return ExtendableProxy;
 }(Object));
-function commonConstructor(req, obj) { req.forEach(function (prop) { return obj.data[prop] = req[prop]; }); }
-var Base = (function (_super) {
-    __extends(Base, _super);
-    function Base(handler, req) {
-        var _this = _super.call(this, handler !== null && handler !== void 0 ? handler : {}) || this;
-        if (req)
-            commonConstructor(req, _this);
+function isEmpty(obj) {
+    for (var _ in obj)
+        return false;
+    return true;
+}
+function commonConstructor(req, obj) {
+    if (isEmpty(obj.data))
+        obj.data = {};
+    for (var prop in req.data)
+        obj.data[prop] = req.data[prop];
+}
+var Data = (function (_super) {
+    __extends(Data, _super);
+    function Data(handler, req) {
+        var _this = _super.call(this, handler) || this;
+        commonConstructor(req !== null && req !== void 0 ? req : {}, _this !== null && _this !== void 0 ? _this : {});
         return _this;
     }
-    return Base;
+    return Data;
 }(ExtendableProxy));
-var Volumen = (function (_super) {
-    __extends(Volumen, _super);
-    function Volumen(h, r) {
-        return _super.call(this, h, r) || this;
-    }
-    ;
-    return Volumen;
-}(Base));
-exports.Volumen = Volumen;
-var Coleccion = (function (_super) {
-    __extends(Coleccion, _super);
-    function Coleccion(h, r) {
-        return _super.call(this, h, r) || this;
-    }
-    ;
-    return Coleccion;
-}(Base));
-exports.Coleccion = Coleccion;
+exports.Data = Data;

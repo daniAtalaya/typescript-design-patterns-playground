@@ -1,9 +1,9 @@
 const scheduler = require('node-schedule');
 const cheerio = require('cheerio');
 const fetcher = require('node-fetch');
-import { Coleccion, Volumen } from './utils';
+const { Volumen, Coleccion } = require('./types');
 const downloadData = async (obj: any, url: string) => {
-    const response: Response = await fetcher(url);
+    const response: Response = await fetcher(url, {});
     if(!response.ok) return;
     obj.success = true;
     obj.data = await response.text();
@@ -37,6 +37,54 @@ let proxy = new Proxy({
                             date: info.slice(-1)[0],
                             numPages: info.find(value => value.includes("páginas")),
                             estado: "Editado",
+                            exDescripcion: col.data.descripcion,
+                            images: [
+                                {
+                                    url: info[0],
+                                    origin: "Internet",
+                                    resolution: {
+                                        width: 102,
+                                        height: 150
+                                    }
+                                }
+                            ]
+                        }
+                    }));
+                });
+                elems = $('center:nth-child(1) > table:nth-child(5) td.cen');
+                elems.each((_item: any, elem: any) => {
+                    let info = $(elem).html().split(/(?:<br>|<img src="|" alt="">|<div style="height: 8px"><\/div>)+/).splice(1);
+                    col.data.volumes.push(new Volumen({}, {
+                        data: {
+                            title: info.slice(1, info.indexOf(info.find(value => value.includes("páginas")))).join(""),
+                            price: parseFloat(info.find(value => value.includes("€")).split(" €")[0]).toFixed(2),
+                            date: info.slice(-1)[0],
+                            numPages: info.find(value => value.includes("páginas")),
+                            estado: "En Preparacion",
+                            exDescripcion: col.data.descripcion,
+                            images: [
+                                {
+                                    url: info[0],
+                                    origin: "Internet",
+                                    resolution: {
+                                        width: 102,
+                                        height: 150
+                                    }
+                                }
+                            ]
+                        }
+                    }));
+                });
+                elems = $('center:nth-child(1) > table:nth-child(7) td.cen');
+                elems.each((_item: any, elem: any) => {
+                    let info = $(elem).html().split(/(?:<br>|<img src="|" alt="">|<div style="height: 8px"><\/div>)+/).splice(1);
+                    col.data.volumes.push(new Volumen({}, {
+                        data: {
+                            title: info.slice(1).join(""),
+                            price: 0.0,
+                            date: "",
+                            numPages: "",
+                            estado: "No Editado",
                             exDescripcion: col.data.descripcion,
                             images: [
                                 {
